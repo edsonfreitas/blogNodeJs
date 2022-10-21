@@ -7,7 +7,7 @@ const path = require('path')
 const app = express()
 
 const PORT = 8989
-//const mongoose = require('mongoose')
+const mongoose = require('mongoose')
 
 //Configurações
     //Body Parser
@@ -17,7 +17,12 @@ const PORT = 8989
     app.engine("handlebars", handlebars.engine({defaultLayout: 'main'}))
     app.set('view engine', 'handlebars')
     //Mongoose
-
+    mongoose.Promise = global.Promise;
+    mongoose.connect('mongodb://localhost/blogapp').then(()=>{
+        console.log('Conectado ao mongodb')
+    }).catch((err)=>{
+        console.log("Ops! Erro ao se conecta: " + err)
+    })
     //Public
     app.use(express.static(path.join(__dirname,"/public")))
 //Rotas
