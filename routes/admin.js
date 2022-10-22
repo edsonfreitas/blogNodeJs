@@ -100,8 +100,21 @@ router.post("/categorias/deletar", (req, res) => {
         req.flash('error_msg', 'Ops! Ocorreu um erro ao deletar a categoria!.')
         res.redirect("/admin/categorias")
     })
+})//<--Deleta Categoria<--
+
+//Rotas postagens
+router.get('/postagens', (req, res) => {
+    res.render("admin/postagens")
 })
 
-//<--Deleta Categoria<--
+router.get('/postagens/add', (req, res) =>{
+    Categoria.find().lean().then((categorias) => {
+        res.render("admin/addpostagens", {categorias: categorias})
+    }).catch((err) => {
+        req.flash('error_msg', 'Ops! Houve um erro ao carregar o formulário!')
+        res.redirect("admin/")
+    })
+})
+// <-- Rotas Postagem < --
 
 module.exports = router;
