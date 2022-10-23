@@ -51,5 +51,5 @@ app.use('/admin', admin)
 //Outros
 
 app.listen(PORT, () =>{
-    console.log("Server run: http://localhost::"+PORT)
+    console.log("Server run: http://localhost:"+PORT)
 })
