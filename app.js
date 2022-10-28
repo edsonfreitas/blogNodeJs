@@ -12,9 +12,10 @@ const Postagem = mongoose.model("postagens");
 require("./models/Categoria");
 const Categoria = mongoose.model("categorias");
 
+const usuarios = require("./routes/usuario")
+
 const path = require("path");
 const app = express();
-
 const PORT = 8989;
 
 //Configurações
@@ -125,7 +126,10 @@ app.get("/404", (req, res) => {
   res.send("ERRO 404");
 });
 
+//Rotas externas
 app.use("/admin", admin);
+app.use('/usuarios', usuarios)
+//<--
 
 //Outros
 
