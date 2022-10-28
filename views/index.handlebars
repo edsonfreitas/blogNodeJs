@@ -1,0 +1,25 @@
+<div class="card bg-light text-dark">
+    <div class="card-body w-75">
+    <h1 class="display-4">Bem vindo ao Blog do Dev</h1>
+    <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate vel at a nihil pariatur. Quam, laudantium sint ad</p>
+    <hr class="my-4">
+    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto sapiente, accusantium quod asperiores commodi.</p>
+    <p class="lead mb-5">
+        <a href="" class="btn btn-primary btn-lg">Crie uma conta</a>
+    </p>
+    </div>
+</div>
+<hr>
+
+<h1>Postagens recentes: </h1>
+{{#each postagens}}
+<di class="card">
+    <div class="card-body">
+        <h3>{{titulo}}</h3>
+        <p>{{descricao}}</p>
+        <span>{{data}}</span>
+    </div>
+</di>
+{{else}}
+    <h5>Nenhuma postagem</h5>
+{{/each}}
