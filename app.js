@@ -5,12 +5,16 @@ const admin = require("./routes/admin");
 const session = require("express-session");
 const flash = require("connect-flash");
 const mongoose = require("mongoose");
+const passport = require('passport')
 // Postagens
 require("./models/Postagem");
 const Postagem = mongoose.model("postagens");
 //Cateorias
 require("./models/Categoria");
 const Categoria = mongoose.model("categorias");
+//Auth
+require("./config/auth")(passport)
+
 
 const usuarios = require("./routes/usuario")
 
@@ -27,6 +31,9 @@ app.use(
     saveUninitialized: true,
   })
 );
+//config Passport
+app.use(passport.initialize())
+app.use(passport.session()) 
 app.use(flash());
 //Middleware
 app.use((req, res, next) => {
