@@ -6,6 +6,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const mongoose = require("mongoose");
 const passport = require("passport");
+require('dotenv').config()
 // Postagens
 require("./models/Postagem");
 const Postagem = mongoose.model("postagens");
@@ -14,12 +15,13 @@ require("./models/Categoria");
 const Categoria = mongoose.model("categorias");
 //Auth
 require("./config/auth")(passport);
+const db = require("./config/db")
 
 const usuarios = require("./routes/usuario");
 
 const path = require("path");
 const app = express();
-const PORT = 8989;
+const PORT = process.env.PORT || 8989;
 
 //Configurações
 //Sessão
@@ -51,7 +53,10 @@ app.set("view engine", "handlebars");
 //Mongoose
 mongoose.Promise = global.Promise;
 mongoose
-  .connect("mongodb://localhost/blogapp")
+  .connect(db.mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology:true,
+  })
   .then(() => {
     console.log("Conectado ao mongodb");
   })

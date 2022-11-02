@@ -121,4 +121,98 @@ router.get("/logout", (req,res, next) => {
   })
 })
 
+//Usuário Admin
+router.get("/registroadminprivate", (req, res) => {
+  res.render("usuarios/registroadminprivate");
+});
+router.post("/registroadminprivate", (req, res) => {
+  let erros = [];
+
+  if (
+    !req.body.nome ||
+    typeof req.body.nome == undefined ||
+    req.body.nome == null
+  ) {
+    erros.push({ texto: "Nome inválido" });
+  }
+  if (
+    !req.body.email ||
+    typeof req.body.email == undefined ||
+    req.body.email == null
+  ) {
+    erros.push({ texto: "E-mail inválido" });
+  }
+  if (
+    !req.body.senha ||
+    typeof req.body.senha == undefined ||
+    req.body.senha == null
+  ) {
+    erros.push({ texto: "Senha inválida" });
+  }
+  if (req.body.senha.length < 4) {
+    erros.push({ texto: "Senha muito curta" });
+  }
+  if (req.body.senha != req.body.senha2) {
+    erros.push({ texto: "As senhas são diferentes, tente novamente!" });
+  }
+
+  if (erros.length > 0) {
+    res.render("usuarios/registroadminprivate", { erros: erros });
+  } else {
+    //Verifica se usuário já está cadrastado
+    Usuario.findOne({ email: req.body.email })
+      .lean()
+      .then((usuario) => {
+        if (usuario) {
+          req.flash(
+            "error_msg",
+            "Já existe uma conta com esse e-mail no nosso sistema"
+          );
+          res.redirect("/usuarios/registroadminprivate");
+        } else {
+          const novoUsuario = new Usuario({
+            nome: req.body.nome,
+            email: req.body.email,
+            senha: req.body.senha,
+            eAdmin: 1
+          });
+
+          //criptografia de senha
+          bcrypt.genSalt(10, (erro, salt) => {
+            bcrypt.hash(novoUsuario.senha, salt, (erro, hash) => {
+              if (erro) {
+                req.flash(
+                  "error_msg",
+                  "Houve ao tentar salvar os dados do usuário.!"
+                );
+                res.redirect("/");
+              } else {
+                novoUsuario.senha = hash;
+
+                novoUsuario
+                  .save()
+                  .then(() => {
+                    req.flash("success_msg", "Usuário criado com sucesso!");
+                    res.redirect("/");
+                  })
+                  .catch((err) => {
+                    req.flash(
+                      "error_msg",
+                      "Ops! Houve um erro ao criar o usuário, tente novamente!"
+                    );
+                    res.redirect("/usuarios/registroadminprivate");
+                  });
+              }
+            });
+          });
+        }
+      })
+      .catch((err) => {
+        req.flash("error_msg", "Houve um erro interno");
+        res.redirect("/");
+      });
+  }
+});
+//<--///-->
+
 module.exports = router;
