@@ -64,7 +64,7 @@ mongoose
     console.log("Ops! Erro ao se conecta: " + err);
   });
 //Public
-app.use(express.static(path.join(__dirname, "/public")));
+app.use(express.static(path.join(__dirname +"/public")));
 
 //Rotas
 app.get("/", (req, res) => {
